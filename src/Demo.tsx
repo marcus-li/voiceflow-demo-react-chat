@@ -82,7 +82,9 @@ export const Demo: React.FC = () => {
                     key={id}
                     Message={({ message, ...props }) =>
                       match(message)
+                        //  If the system generates a custom message with type == calendar
                         .with({ type: CustomMessage.CALENDAR }, ({ payload: { today } }) => (
+                          //  render a calendarMessage inside a message body
                           <CalendarMessage {...props} value={new Date(today)} runtime={runtime} />
                         ))
                         .with({ type: CustomMessage.VIDEO }, ({ payload: url }) => <VideoMessage url={url} />)
