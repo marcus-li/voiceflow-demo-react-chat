@@ -13,6 +13,11 @@ It includes custom `account_info`, `calendar` and `video` actions.
 
 ## Configure Environment
 
+In this project the initialization happens in context.tsx
+for prouduction environment:
+https://developer.voiceflow.com/docs/chat-widget
+
+
 Follow [these instructions](https://developer.voiceflow.com/reference/project#obtaining-a-dialog-manager-api-key)
 to get the Dialog API key for your Voiceflow project.
 

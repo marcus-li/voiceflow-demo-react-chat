@@ -20,6 +20,7 @@ export interface RuntimeContextValue {
 
 export const RuntimeContext = createContext<RuntimeContextValue | null>(null);
 
+//https://developer.voiceflow.com/docs/chat-widget
 export const RuntimeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const emitter = useMemo(() => createNanoEvents<RuntimeEvents>(), []);
   const runtime = useRuntime({
