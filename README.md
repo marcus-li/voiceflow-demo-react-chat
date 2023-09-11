@@ -1,7 +1,8 @@
 # demo-react-chat
 
-## Install Dependencies
+## Install Dependencies & build project
 
+uses Yarn and Vite https://vitejs.dev/guide/build.html
 ```sh
 yarn install
 ```

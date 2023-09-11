@@ -4,14 +4,10 @@ import { Chat, ChatWindow, Launcher, RuntimeAPIProvider, SessionStatus, SystemRe
 import { useContext, useState } from 'react';
 import { match } from 'ts-pattern';
 
-import { LiveAgentStatus } from './components/LiveAgentStatus.component';
-import { StreamedMessage } from './components/StreamedMessage.component';
 import { RuntimeContext } from './context';
 import { CustomMessage } from './custom-message.enum';
 import { CalendarMessage } from './messages/CalendarMessage.component';
-import { VideoMessage } from './messages/VideoMessage.component';
 import { DemoContainer } from './styled';
-import { useLiveAgent } from './use-live-agent.hook';
 
 const IMAGE = 'https://picsum.photos/seed/1/200/300';
 const AVATAR = 'https://picsum.photos/seed/1/80/80';
@@ -20,7 +16,6 @@ export const Demo: React.FC = () => {
   const [open, setOpen] = useState(false);
 
   const { runtime } = useContext(RuntimeContext)!;
-  const liveAgent = useLiveAgent();
 
   const handleLaunch = async () => {
     setOpen(true);
@@ -33,11 +28,7 @@ export const Demo: React.FC = () => {
   };
 
   const handleSend = (message: string) => {
-    if (liveAgent.isEnabled) {
-      liveAgent.sendUserReply(message);
-    } else {
       runtime.reply(message);
-    }
   };
 
   if (!open) {
@@ -59,8 +50,8 @@ export const Demo: React.FC = () => {
       <ChatWindow.Container>
         <RuntimeAPIProvider {...runtime}>
           <Chat
-            title="My Assistant"
-            description="welcome to my assistant"
+            title="Calendar Demo"
+            description="welcome to calendar demo"
             image={IMAGE}
             avatar={AVATAR}
             withWatermark
@@ -72,24 +63,25 @@ export const Demo: React.FC = () => {
             onSend={handleSend}
             onMinimize={handleEnd}
           >
-            {liveAgent.isEnabled && <LiveAgentStatus talkToRobot={liveAgent.talkToRobot} />}
             {runtime.session.turns.map((turn, turnIndex) =>
-              match(turn)
+              match(turn)//What type of turn is this?
                 .with({ type: TurnType.USER }, ({ id, type: _, ...rest }) => <UserResponse {...rest} key={id} />)
                 .with({ type: TurnType.SYSTEM }, ({ id, type: _, ...rest }) => (
                   <SystemResponse
                     {...rest}
                     key={id}
                     Message={({ message, ...props }) =>
-                      match(message)
-                        //  If the system generates a custom message with type == calendar
-                        .with({ type: CustomMessage.CALENDAR }, ({ payload: { today } }) => (
+                      match(message)  //this is a system message, what type of system message is this?
+                        //  mli If the system generates a custom message with type == calendar
+                        .with({ type: CustomMessage.CALENDAR }, ({ payload : {today} }) =>
                           //  render a calendarMessage inside a message body
-                          <CalendarMessage {...props} value={new Date(today)} runtime={runtime} />
-                        ))
-                        .with({ type: CustomMessage.VIDEO }, ({ payload: url }) => <VideoMessage url={url} />)
-                        .with({ type: CustomMessage.STREAMED_RESPONSE }, ({ payload: { getSocket } }) => <StreamedMessage getSocket={getSocket} />)
-                        .with({ type: CustomMessage.PLUGIN }, ({ payload: { Message } }) => <Message />)
+                            /**
+                             * payload  looks like: { "appointment_date": 1686696763871 }
+                             */
+                            {
+                                console.log('Calendar Payload: v', today);
+                                return (<CalendarMessage {...props} value={new Date(today)} runtime={runtime} />);
+                            })
                         .otherwise(() => <SystemResponse.SystemMessage {...props} message={message} />)
                     }
                     avatar={AVATAR}

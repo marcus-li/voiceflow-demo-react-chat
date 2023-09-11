@@ -2,15 +2,10 @@ import { useRuntime } from '@voiceflow/react-chat';
 import { createNanoEvents } from 'nanoevents';
 import { createContext, useMemo } from 'react';
 
-import { LiveAgentPlatform } from '../shared/live-agent-platform.enum';
 import { AccountInfoTrace } from './traces/account-info.trace';
 import { CalendarTrace } from './traces/calendar.trace';
-import { PluginTrace } from './traces/plugin.trace';
-import { TalkToAgentTrace } from './traces/talk-to-agent.trace';
-import { VideoTrace } from './traces/video.trace';
 
 export interface RuntimeEvents {
-  live_agent: (platform: LiveAgentPlatform) => void;
 }
 
 export interface RuntimeContextValue {
@@ -26,7 +21,7 @@ export const RuntimeProvider: React.FC<React.PropsWithChildren> = ({ children })
   const runtime = useRuntime({
     verify: { authorization: import.meta.env.VF_DM_API_KEY },
     session: { userID: `anonymous-${Math.random()}` },
-    traces: [AccountInfoTrace, CalendarTrace, VideoTrace, PluginTrace, TalkToAgentTrace((platform) => emitter.emit('live_agent', platform))],
+    traces: [AccountInfoTrace, CalendarTrace],
   });
 
   const subscribe = (event: keyof RuntimeEvents, callback: (data?: any) => void) => emitter.on(event, callback);

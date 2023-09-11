@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build":"vite build && node embed-script.js"
+    "build": "vite build && node embed-script.js"
   },
   "prettier": "@voiceflow/prettier-config",
   "dependencies": {

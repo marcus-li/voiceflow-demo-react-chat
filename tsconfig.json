@@ -4,7 +4,9 @@
     "module": "esnext",
     "moduleResolution": "node",
     "lib": [
-      "dom"
+      "dom",
+      "es2017.intl",
+      "es2015.symbol.wellknown"
     ],
     "jsx": "react-jsx",
     "esModuleInterop": true,
